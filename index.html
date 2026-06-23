@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f3f0e8">
+  <title>知潮 · 私人新闻站</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="知潮首页">
+        <span class="brand-mark">知</span>
+        <span><strong>知潮</strong><small>私人新闻编辑部</small></span>
+      </a>
+
+      <nav class="main-nav" aria-label="主导航">
+        <button class="nav-item active" data-view="today">
+          <span class="nav-icon">◉</span><span>今日简报</span><b>15</b>
+        </button>
+        <button class="nav-item" data-view="topics">
+          <span class="nav-icon">⌘</span><span>主题频道</span>
+        </button>
+        <button class="nav-item" data-view="saved">
+          <span class="nav-icon">◇</span><span>收藏追踪</span><b id="savedCount">0</b>
+        </button>
+      </nav>
+
+      <div class="sidebar-label">关注领域</div>
+      <div class="topic-list" id="topicList"></div>
+
+      <div class="sidebar-footer">
+        <button class="settings-button" id="settingsButton">
+          <span>⚙</span><span>偏好设置</span>
+        </button>
+        <div class="profile">
+          <div class="avatar">C</div>
+          <span><strong>我的新闻站</strong><small>每日 08:00 更新</small></span>
+          <i class="status-dot"></i>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="打开菜单">☰</button>
+        <div class="date-block">
+          <span id="fullDate">2026年6月21日</span>
+          <small>星期日 · 第 172 天</small>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" id="searchButton" aria-label="搜索">⌕</button>
+          <button class="icon-button" id="themeButton" aria-label="切换明暗模式">☼</button>
+          <button class="primary-button" id="digestButton"><span>✦</span> 生成今日摘要</button>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div>
+          <span class="eyebrow">DAILY BRIEFING · NO. 001 · 演示数据</span>
+          <h1>早上好，今天值得关注的<br><em>15 个变化</em></h1>
+          <p>从全球 1,286 条信息中筛选，预计阅读 12 分钟。</p>
+        </div>
+        <div class="hero-orbit" aria-hidden="true">
+          <div class="orbit-ring ring-one"></div>
+          <div class="orbit-ring ring-two"></div>
+          <span class="orbit-core">15</span>
+          <i class="planet p1"></i><i class="planet p2"></i><i class="planet p3"></i>
+        </div>
+      </section>
+
+      <section class="signal-strip">
+        <span class="signal-label"><i></i> 今日信号</span>
+        <div class="signal-copy">
+          <strong>AI 基础设施与电力系统的耦合正在加深</strong>
+          <span>今日 6 条重点新闻共同指向这一趋势</span>
+        </div>
+        <button id="signalButton">查看关联 →</button>
+      </section>
+
+      <section class="section-heading">
+        <div>
+          <span class="section-index">01</span>
+          <h2>今日必读</h2>
+          <p>如果今天只读三条，就读这些</p>
+        </div>
+        <div class="view-controls">
+          <button class="active" data-layout="cards" aria-label="卡片视图">▦</button>
+          <button data-layout="list" aria-label="列表视图">☷</button>
+        </div>
+      </section>
+
+      <div class="lead-grid" id="leadGrid"></div>
+
+      <section class="section-heading secondary-heading">
+        <div>
+          <span class="section-index">02</span>
+          <h2>重点动态</h2>
+          <p>与你的兴趣高度相关</p>
+        </div>
+        <div class="filter-chips" id="filterChips"></div>
+      </section>
+
+      <div class="news-list" id="newsList"></div>
+
+      <button class="load-more" id="loadMore">展开今日余下 4 条 <span>↓</span></button>
+
+      <footer>
+        <span>知潮 ZHICHAO © 2026</span>
+        <p>少一点噪音，多一点理解。</p>
+        <span>下一次更新：明日 08:00</span>
+      </footer>
+    </main>
+  </div>
+
+  <div class="search-panel" id="searchPanel" aria-hidden="true">
+    <div class="search-box">
+      <button class="close-button" id="closeSearch">×</button>
+      <span class="eyebrow">SEARCH YOUR BRIEFING</span>
+      <h2>搜索今天的新闻</h2>
+      <input id="searchInput" type="search" placeholder="输入公司、技术或关键词…" autocomplete="off">
+      <div id="searchResults" class="search-results"></div>
+    </div>
+  </div>
+
+  <dialog id="settingsDialog">
+    <form method="dialog">
+      <div class="dialog-header">
+        <div><span class="eyebrow">PERSONALIZE</span><h2>偏好设置</h2></div>
+        <button value="cancel" class="close-button">×</button>
+      </div>
+      <label class="setting-row">
+        <span><strong>每日推送时间</strong><small>新简报准备好的时间</small></span>
+        <input type="time" value="08:00">
+      </label>
+      <label class="setting-row">
+        <span><strong>每日新闻数量</strong><small>建议保持精简</small></span>
+        <select><option>10 条</option><option selected>15 条</option><option>20 条</option></select>
+      </label>
+      <label class="setting-row switch-row">
+        <span><strong>中文翻译</strong><small id="translationStatus">正在检查配置…</small></span>
+        <span class="config-badge" id="translationBadge">检查中</span>
+      </label>
+      <label class="setting-row switch-row">
+        <span><strong>微信推送</strong><small id="wechatStatus">正在检查配置…</small></span>
+        <span class="config-badge" id="wechatBadge">检查中</span>
+      </label>
+      <button type="button" class="secondary-button full-button" id="testPushButton">发送一条测试简报到微信</button>
+      <button type="button" class="secondary-button full-button" id="testConnectionsButton">检查翻译与微信连接</button>
+      <div class="dialog-note">密钥保存在本机的 .env 文件中，不会显示在网页上。</div>
+      <button value="default" class="primary-button full-button">保存设置</button>
+    </form>
+  </dialog>
+
+  <dialog id="articleDialog" class="article-dialog">
+    <article>
+      <button class="close-button" id="closeArticleButton" aria-label="关闭">×</button>
+      <div class="article-kicker" id="articleKicker"></div>
+      <h2 id="articleTitle"></h2>
+      <p class="article-lead" id="articleSummary"></p>
+      <div class="content-basis" id="contentBasis"></div>
+      <section class="article-section">
+        <h3>中文深度解读</h3>
+        <div class="article-analysis" id="articleAnalysis"></div>
+      </section>
+      <section class="article-section" id="keyPointsSection">
+        <h3>关键要点</h3>
+        <ul id="articleKeyPoints"></ul>
+      </section>
+      <div class="article-columns">
+        <section class="article-section">
+          <h3>背景</h3>
+          <p id="articleBackground"></p>
+        </section>
+        <section class="article-section">
+          <h3>可能影响</h3>
+          <p id="articleImpact"></p>
+        </section>
+      </div>
+      <div class="article-source-note">本文为基于来源材料生成的中文解读，不是原文的逐字转载。</div>
+      <a class="primary-button article-original" id="articleOriginal" target="_blank" rel="noopener noreferrer">查看来源原文</a>
+    </article>
+  </dialog>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

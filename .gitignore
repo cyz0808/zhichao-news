@@ -1,0 +1,5 @@
+.env
+data/news.json
+dist/
+runtime/
+*.zip

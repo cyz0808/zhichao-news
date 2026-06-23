@@ -1,0 +1,15 @@
+{
+  "name": "zhichao-private-news-desk",
+  "version": "0.4.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "collect": "node server.js --collect-once",
+    "build:pages": "node scripts/build-pages.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
