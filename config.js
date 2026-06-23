@@ -20,6 +20,26 @@ export const config = {
   openaiModel: process.env.OPENAI_MODEL || "gpt-5.5",
   deepseekModel: process.env.DEEPSEEK_MODEL || "deepseek-chat",
   maxAgeHours: Number(process.env.MAX_AGE_HOURS || 72),
+  editorialAi: process.env.EDITORIAL_AI !== "0",
+  editorialCandidateSize: Number(process.env.EDITORIAL_CANDIDATE_SIZE || 36),
+  minDigestScore: Number(process.env.MIN_DIGEST_SCORE || 52),
+  xSignals: {
+    enabled: process.env.X_SIGNALS_ENABLED !== "0",
+    bearerToken: process.env.X_BEARER_TOKEN || "",
+    maxResults: Number(process.env.X_MAX_RESULTS || 10),
+    minCredibility: Number(process.env.X_MIN_CREDIBILITY || 65),
+    accounts: (process.env.X_ACCOUNTS || "OpenAI,AnthropicAI,NVIDIA,AMD,Microsoft,Google,Meta,Tesla").split(",").map(item => item.trim()).filter(Boolean),
+    keywords: (process.env.X_KEYWORDS || [
+      "\"AI data center\" investment",
+      "\"export control\" semiconductor",
+      "\"power grid\" data center",
+      "\"GPU\" supply chain",
+      "\"central bank\" inflation",
+      "\"China\" semiconductor",
+      "\"nuclear\" power data center",
+      "\"electricity demand\" AI"
+    ].join("|")).split("|").map(item => item.trim()).filter(Boolean)
+  },
   interests: {
     "人工智能": 1.35,
     "算力芯片": 1.3,

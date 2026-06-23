@@ -67,3 +67,13 @@ GitHub 的定时任务可能延迟几分钟。
 - 原始新闻正文不会发布，只发布中文解读。
 - 工作流日志不会主动打印密钥。
 - 请勿在 Issue、README、截图或聊天中粘贴密钥。
+
+## X 线索层 Secret
+
+如果线上部署也需要抓取 X 线索，请在 GitHub Actions Secrets 中额外添加：
+
+| Secret 名称 | 内容 |
+|---|---|
+| `X_BEARER_TOKEN` | X API Bearer Token |
+
+不配置 `X_BEARER_TOKEN` 时，网站仍会正常使用 RSS 新闻源，X 线索层会自动跳过。

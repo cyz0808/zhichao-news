@@ -81,3 +81,41 @@ powershell -ExecutionPolicy Bypass -File .\install-daily-task.ps1
 ## 当前边界
 
 当前使用 RSS 摘要而非全文抓取；翻译质量受 RSS 原始摘要完整度影响。本机定时任务要求电脑至少在当天某个时间开机。
+
+## AI 主编复审
+
+默认开启“AI 主编”筛选：系统会先用规则选出约 36 条候选，再让 DeepSeek/OpenAI 以“私人投资研究员 + 科技编辑”的标准复审，最终选出 15 条。
+
+它会优先保留政策监管、资本开支、算力芯片、数据中心、电力基础设施、供应链、财报订单和产业化进展；降低纯观点、营销稿、趣味科学、早期概念和离现实较远的猜想。
+
+如需节省 API，可在 `.env` 中关闭：
+
+```env
+EDITORIAL_AI=0
+```
+
+如需调整复审候选数量：
+
+```env
+EDITORIAL_CANDIDATE_SIZE=36
+```
+
+## X 线索层
+
+可选接入 X API v2。配置 `X_BEARER_TOKEN` 后，系统会每天抓取指定账号和关键词的动态，并把它们作为“社媒线索”加入候选池。
+
+X 线索不会直接等同于正式新闻。系统会先检查账号可信度、认证信息、粉丝规模和互动强度，再交给现实信号筛选和 AI 主编复审。未通过可信度判断的 X 内容不会进入推荐。
+
+```env
+X_SIGNALS_ENABLED=1
+X_BEARER_TOKEN=你的X_Bearer_Token
+X_ACCOUNTS=OpenAI,AnthropicAI,NVIDIA,AMD,Microsoft,Google,Meta,Tesla
+X_KEYWORDS="AI data center" investment|"export control" semiconductor|"power grid" data center|"China" semiconductor
+X_MIN_CREDIBILITY=65
+```
+
+如果不想使用 X，保持 `X_BEARER_TOKEN` 为空，或设置：
+
+```env
+X_SIGNALS_ENABLED=0
+```

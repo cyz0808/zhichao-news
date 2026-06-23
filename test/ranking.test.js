@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { classify, deduplicate, selectDigest, similarity } from "../lib/ranking.js";
+import { assessRealitySignal, classify, deduplicate, prepareArticles, selectDigest, similarity } from "../lib/ranking.js";
 
 test("classifies AI and energy stories", () => {
   assert.equal(classify({ title: "New AI language model", description: "machine learning", defaultTopic: "前沿科学" }), "人工智能");
@@ -39,4 +39,51 @@ test("digest limits dominance by one source", () => {
   }));
   const digest = selectDigest(articles, 6);
   assert.ok(digest.filter(item => item.source === "Dominant").length <= 3);
+});
+
+test("prioritizes practical policy, capital and infrastructure signals", () => {
+  const practical = assessRealitySignal({
+    title: "Microsoft invests $12 billion in AI data center and power grid capacity",
+    description: "The project adds gigawatts of electricity demand and expands Nvidia GPU deployments.",
+    source: "MIT Technology Review",
+    authority: 0.9
+  });
+  const soft = assessRealitySignal({
+    title: "A surprising AI concept could change everything someday",
+    description: "An opinion newsletter explores a prototype that may become useful in the future.",
+    source: "Example Blog",
+    authority: 0.5
+  });
+
+  assert.ok(practical.score > soft.score);
+  assert.equal(practical.isPractical, true);
+  assert.equal(soft.isPractical, false);
+});
+
+test("prepareArticles filters soft stories with weak real-world signal", () => {
+  const now = new Date().toISOString();
+  const articles = [
+    {
+      id: "strong",
+      title: "Nvidia and TSMC expand AI chip production capacity with multibillion investment",
+      description: "The supply chain deal adds manufacturing capacity for data center GPUs.",
+      url: "https://example.com/strong",
+      publishedAt: now,
+      source: "BBC Business",
+      authority: 0.9
+    },
+    {
+      id: "soft",
+      title: "Weird AI mystery could someday change science",
+      description: "A fun opinion guide about a student prototype that might be surprising.",
+      url: "https://example.com/soft",
+      publishedAt: now,
+      source: "Example Blog",
+      authority: 0.4
+    }
+  ];
+
+  const prepared = prepareArticles(articles);
+  assert.ok(prepared.some(article => article.id === "strong"));
+  assert.ok(!prepared.some(article => article.id === "soft"));
 });
